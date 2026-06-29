@@ -9,7 +9,6 @@ export async function submitExpense(formData: FormData) {
   const orgId = formData.get('org_id') as string
   const amount = parseFloat(formData.get('amount') as string)
   const description = formData.get('description') as string
-  // Add category extraction here
   const category = formData.get('category') as string 
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -22,13 +21,13 @@ export async function submitExpense(formData: FormData) {
       submitted_by: user.id,
       amount: amount,
       description: description,
-      category: category, // Add category to the insert payload
+      category: category,
       status: 'pending'
     })
 
   if (error) {
     console.error('Error submitting expense:', error)
-    return { error: error.message }
+    throw new Error(`Error submitting expense: ${error.message}`)
   }
 
   revalidatePath(`/dashboard/${orgId}`)
