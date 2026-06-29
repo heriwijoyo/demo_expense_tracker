@@ -17,7 +17,7 @@ export async function createOrganization(formData: FormData) {
 
   if (error) {
     console.error('Error creating org:', error)
-    return { error: error.message }
+    throw new Error(`Failed to create organization: ${error.message}`)
   }
 
   revalidatePath('/dashboard')
